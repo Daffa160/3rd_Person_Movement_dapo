@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    //referensi buat input system
     PlayerController playerController;
 
-    //butuh variabel buat wasd (Vector2)
-    [Header("Inputan User")]
-    public Vector2 arahGerak;
-    public float vertical;
+    public Vector2 input;//butuh Variabel arah gerak x y
     public float horizontal;
+    public float vertical;
 
 
     private void OnEnable()
@@ -19,8 +16,8 @@ public class InputManager : MonoBehaviour
         if(playerController == null)
         {
             playerController = new PlayerController();
-
-            playerController.PlayerMovement.Movement.performed += i => arahGerak = i.ReadValue<Vector2>();
+            //mengaktifkan inputActionMap (new input system )
+            playerController.PlayerMovement.Movement.performed += i => input = i.ReadValue<Vector2>();
         }
 
         playerController.Enable();
@@ -33,14 +30,12 @@ public class InputManager : MonoBehaviour
 
     public void HandleAllInput()
     {
-        Movement();
+        MovementInput();
     }
 
-    private void Movement()
+    private void MovementInput()
     {
-        vertical = arahGerak.y;
-        horizontal = arahGerak.x;
+        horizontal = input.x;
+        vertical = input.y;
     }
-
-
 }
