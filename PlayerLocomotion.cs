@@ -5,17 +5,20 @@ using UnityEngine;
 public class PlayerLocomotion : MonoBehaviour
 {
     InputManager inputManager;
+    CharacterController controller;
+
+    [Header("Movement Speed")]
+
     //butuh variabel tubuh player
-    Rigidbody playerRigidbody;
+    //Rigidbody playerRigidbody;
     //butuh variabel obyek untuk digerakan
     Transform cameraObyek; // sesuai tampilan kamerea arah graknya
 
     //variabel arah
     Vector3 direction; //butuh variabel arah x, y, z yang akan dituju
 
-    [Header("Movement Speed")]
-    public float walkSpeed = 3;
-    public float runSpeed = 6;
+    public float walkSpeed = 0.03f;
+    public float runSpeed = 0.01f;
     public float sprintSpeed = 10;
 
     [Header("Kecepatan Rotasi")]
@@ -27,8 +30,9 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void Awake()
     {
+        controller = GetComponent<CharacterController>();
         inputManager = GetComponent<InputManager>();
-        playerRigidbody = GetComponent<Rigidbody>();
+        //playerRigidbody = GetComponent<Rigidbody>();
         cameraObyek = Camera.main.transform;
     }
 
@@ -66,8 +70,8 @@ public class PlayerLocomotion : MonoBehaviour
 
         //rumus untuk menggerakn obyek
         Vector3 movement = direction;
-        playerRigidbody.velocity = movement;
-
+        //playerRigidbody.velocity = movement;
+        controller.Move(movement);
     }
 
     private void RotationMovement()
@@ -93,8 +97,6 @@ public class PlayerLocomotion : MonoBehaviour
 
         //baru di gerakan dan rotasikan
         transform.rotation = playerRotation;
-
-
     }
 
 }
