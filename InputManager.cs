@@ -56,12 +56,20 @@ public class InputManager : MonoBehaviour
         //start animasi
         //rumus menghitung, buat animasi
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
-        //animasi berjalan sesuai value yang ada pada animator
-        animatorManager.UpadateAnimatorValue(0f, moveAmount);
+        animatorManager.UpadateAnimatorValue(0f, moveAmount, playerLocomotion.lari);
     }
 
     private void HandleSprintingMovement()
     {
-        
+        if (ShiftPress)
+        {
+            playerLocomotion.lari = true;
+            //tambahkan UpdatValueAnimatio pengkondisan bool
+        }
+        else
+        {
+            playerLocomotion.lari = false;
+        }
+
     }
 }
