@@ -1,5 +1,5 @@
-# FPS_Scrip
+# 3rd_person_movement
 scrip controoler untuk fps movement
 UNITY
 
-refrensi dari YT Breaky
+refrensi dari Sebastian Grave
