@@ -5,45 +5,74 @@ using UnityEngine;
 public class PlayerLocomotion : MonoBehaviour
 {
     InputManager inputManager;
+    //butuh variabel tubuh player
+    Rigidbody playerRigidbody;
+    //butuh variabel obyek untuk digerakan
+    Transform cameraObyek; // sesuai tampilan kamerea arah graknya
 
-    //variabel untuk lokasi arah gerak
-    Vector3 direction;
-    //variabel untuk obyek bergerak, kita ingin obyek bergerak sesuai arah kamera
-    Transform Arahcamera;
-    //untuk menggerakan obyek diperlukan Rigidbody obyek
-    Rigidbody rigibody;//jan lupa di startkan fungsinya terlebih dahulu
+    //variabel arah
+    Vector3 direction; //butuh variabel arah x, y, z yang akan dituju
 
     [Header("Movement Speed")]
-    public float walkingSpeed = 1;
-    public float runingSpeed = 4;
-    public float sprintingSpeed = 7;
+    public float walkSpeed = 3;
+
+    [Header("Kecepatan Rotasi")]
+    public float rotationSpeed = 15;
 
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
-        rigibody = GetComponent<Rigidbody>();
-        //karena kita ingin menggerakan player dengan arah kamera, di awal perlu di transform
-        Arahcamera = Camera.main.transform;
+        playerRigidbody = GetComponent<Rigidbody>();
+        cameraObyek = Camera.main.transform;
     }
 
-    public void SemuaGerakan()
+    public void HandleAllMovement()
     {
-        ArahBergerak();
+        Movement();
+        RotationMovement();
     }
 
-
-    //void aksi terhadap inputan
-    private void ArahBergerak()
+    private void Movement()
     {
-        direction = Arahcamera.forward * inputManager.vertical;
-        direction = direction + Arahcamera.right * inputManager.horizontal;
-        direction.Normalize(); // kita ingin inputan sesuai ketika inputan lebih dari 2
-
+        //rumus inputan buat vertical dan hori
+        direction = cameraObyek.forward * inputManager.vertical;
+        direction = direction + cameraObyek.right * inputManager.horizontal;
+        direction.Normalize(); // di normalkan jika inputanya melebihi dari 2
         direction.y = 0;
-        direction = direction * walkingSpeed;
+        // kecepatan maju obyek
+        direction = direction * walkSpeed;
 
-        Vector3 movement = direction; //semua hal diatasa dimasukan kedalam variabel baru beru[a movement
-        rigibody.velocity = movement; //lalu rigibody.maju? akan jalan sesuai inputan diatas
+        //rumus untuk menggerakn obyek
+        Vector3 movement = direction;
+        playerRigidbody.velocity = movement;
+
+    }
+
+    private void RotationMovement()
+    {
+        //dibutuhkan Variabel Vector baru untuk penghitung
+        Vector3 targetRotation = Vector3.zero;
+        //rumusnya hampir sama dengan movement()
+        targetRotation = cameraObyek.forward * inputManager.vertical;
+        targetRotation = targetRotation + cameraObyek.right * inputManager.horizontal;
+        targetRotation.Normalize();
+        targetRotation.y = 0;
+
+        //jika arah kamera == 0 akan bergerak maju kedepan
+        if(targetRotation == Vector3.zero)
+        {
+            targetRotation = transform.forward;
+        }
+
+        //Quaternion bertanggung jawab untuk menghitung nilai2 Vector3, biasanya utk menghitung pergesaran rotasi
+        //rumus rotasi obyek
+        Quaternion targetDirection = Quaternion.LookRotation(targetRotation);
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetDirection, rotationSpeed * Time.deltaTime);
+
+        //baru di gerakan dan rotasikan
+        transform.rotation = playerRotation;
+
+
     }
 
 }
