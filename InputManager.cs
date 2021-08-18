@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
             playerController.PlayerMovement.Movement.performed += i => input = i.ReadValue<Vector2>();
             //shift
             playerController.PlayerMovement.Runing.performed += i => ShiftPress = true;
-            playerController.PlayerMovement.Runing.performed += i => ShiftPress = false;
+            playerController.PlayerMovement.Runing.canceled += i => ShiftPress = false;
         }
 
         playerController.Enable();
