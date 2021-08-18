@@ -15,9 +15,15 @@ public class PlayerLocomotion : MonoBehaviour
 
     [Header("Movement Speed")]
     public float walkSpeed = 3;
+    public float runSpeed = 6;
+    public float sprintSpeed = 10;
 
     [Header("Kecepatan Rotasi")]
     public float rotationSpeed = 15;
+
+    [Header("Indicator")]
+    public bool lari; //untuk pengkondisian true or false nya ada pada inputManager
+
 
     private void Awake()
     {
@@ -39,8 +45,24 @@ public class PlayerLocomotion : MonoBehaviour
         direction = direction + cameraObyek.right * inputManager.horizontal;
         direction.Normalize(); // di normalkan jika inputanya melebihi dari 2
         direction.y = 0;
+
         // kecepatan maju obyek
-        direction = direction * walkSpeed;
+        if (lari)
+        {
+            direction = direction * sprintSpeed;
+        }
+        else
+        {
+            if(inputManager.moveAmount >= 0.5)
+            {
+                direction = direction * runSpeed;
+            }
+            else
+            {
+                direction = direction * walkSpeed;
+            }
+        }
+        
 
         //rumus untuk menggerakn obyek
         Vector3 movement = direction;
