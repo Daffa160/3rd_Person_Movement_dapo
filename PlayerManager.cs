@@ -12,14 +12,15 @@ public class PlayerManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
     }
-    // Update is called once per frame
-    private void Update()
+
+    public void Update()
     {
         inputManager.HandleAllInput();
     }
 
     private void FixedUpdate()
     {
-        playerLocomotion.SemuaGerakan();
+        playerLocomotion.HandleAllMovement();
     }
+
 }
