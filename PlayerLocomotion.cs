@@ -10,6 +10,8 @@ public class PlayerLocomotion : MonoBehaviour
     Vector3 direction;
     //variabel untuk obyek bergerak, kita ingin obyek bergerak sesuai arah kamera
     Transform Arahcamera;
+    //untuk menggerakan obyek diperlukan Rigidbody obyek
+    Rigidbody rigibody;//jan lupa di startkan fungsinya terlebih dahulu
 
     [Header("Movement Speed")]
     public float walkingSpeed = 1;
@@ -19,6 +21,7 @@ public class PlayerLocomotion : MonoBehaviour
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
+        rigibody = GetComponent<Rigidbody>();
         //karena kita ingin menggerakan player dengan arah kamera, di awal perlu di transform
         Arahcamera = Camera.main.transform;
     }
@@ -38,6 +41,9 @@ public class PlayerLocomotion : MonoBehaviour
 
         direction.y = 0;
         direction = direction * walkingSpeed;
+
+        Vector3 movement = direction; //semua hal diatasa dimasukan kedalam variabel baru beru[a movement
+        rigibody.velocity = movement; //lalu rigibody.maju? akan jalan sesuai inputan diatas
     }
 
 }
