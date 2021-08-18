@@ -5,19 +5,33 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     PlayerController playerController;
+    AnimatorManager animatorManager;
+    PlayerLocomotion playerLocomotion;
 
-    public Vector2 input;//butuh Variabel arah gerak x y
+    public Vector2 input;
     public float horizontal;
     public float vertical;
+    public float moveAmount;
 
+    [Header("Indicator")]
+    public bool ShiftPress;
+
+    private void Awake()
+    {
+        animatorManager = GetComponent<AnimatorManager>();
+        playerLocomotion = GetComponent<PlayerLocomotion>();
+    }
 
     private void OnEnable()
     {
         if(playerController == null)
         {
             playerController = new PlayerController();
-            //mengaktifkan inputActionMap (new input system )
+
             playerController.PlayerMovement.Movement.performed += i => input = i.ReadValue<Vector2>();
+            //shift
+            playerController.PlayerMovement.Runing.performed += i => ShiftPress = true;
+            playerController.PlayerMovement.Runing.performed += i => ShiftPress = false;
         }
 
         playerController.Enable();
@@ -31,11 +45,23 @@ public class InputManager : MonoBehaviour
     public void HandleAllInput()
     {
         MovementInput();
+        HandleSprintingMovement();
     }
 
     private void MovementInput()
     {
         horizontal = input.x;
         vertical = input.y;
+
+        //start animasi
+        //rumus menghitung, buat animasi
+        moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+        //animasi berjalan sesuai value yang ada pada animator
+        animatorManager.UpadateAnimatorValue(0f, moveAmount);
+    }
+
+    private void HandleSprintingMovement()
+    {
+        
     }
 }
