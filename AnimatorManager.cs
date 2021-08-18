@@ -16,7 +16,7 @@ public class AnimatorManager : MonoBehaviour
         horizontal = Animator.StringToHash("horizontal");
     }
 
-    public void UpadateAnimatorValue(float horizontalMovement, float verticalMovemen)//, bool lagiLari)
+    public void UpadateAnimatorValue(float horizontalMovement, float verticalMovemen, bool lagiLari)
     {
         //animation snapping
 
@@ -68,11 +68,11 @@ public class AnimatorManager : MonoBehaviour
         }
         #endregion
 
-        /*if (lagiLari)
+        if (lagiLari)
         {
             snappHorizontal = horizontalMovement;
             snappVertical = 2;
-        }*/
+        }
 
         animator.SetFloat(horizontal, snappHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snappVertical, 0.1f, Time.deltaTime);
