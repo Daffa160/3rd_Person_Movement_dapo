@@ -57,11 +57,12 @@ public class InputManager : MonoBehaviour
         //rumus menghitung, buat animasi
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
         animatorManager.UpadateAnimatorValue(0f, moveAmount, playerLocomotion.lari);
+        Debug.Log(moveAmount);
     }
 
     private void HandleSprintingMovement()
     {
-        if (ShiftPress)
+        if (ShiftPress && moveAmount == 1)
         {
             playerLocomotion.lari = true;
             //tambahkan UpdatValueAnimatio pengkondisan bool
