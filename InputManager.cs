@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Indicator")]
     public bool ShiftPress;
+    public bool SpacePress;
 
     private void Awake()
     {
@@ -32,6 +33,10 @@ public class InputManager : MonoBehaviour
             //shift
             playerController.PlayerMovement.Runing.performed += i => ShiftPress = true;
             playerController.PlayerMovement.Runing.canceled += i => ShiftPress = false;
+
+            //jump
+            playerController.PlayerMovement.Jump.performed += i => SpacePress = true;
+            playerController.PlayerMovement.Jump.canceled += i => SpacePress = false;
         }
 
         playerController.Enable();
@@ -45,7 +50,8 @@ public class InputManager : MonoBehaviour
     public void HandleAllInput()
     {
         MovementInput();
-        HandleSprintingMovement();
+        HandleSprintingInput();
+        HandleJumpInput();
     }
 
     private void MovementInput()
@@ -60,7 +66,7 @@ public class InputManager : MonoBehaviour
         Debug.Log(moveAmount);
     }
 
-    private void HandleSprintingMovement()
+    private void HandleSprintingInput()
     {
         if (ShiftPress && moveAmount == 1)
         {
@@ -71,6 +77,19 @@ public class InputManager : MonoBehaviour
         {
             playerLocomotion.lari = false;
         }
-
     }
+
+    private void HandleJumpInput()
+    {
+        if (SpacePress)
+        {
+            playerLocomotion.loncat = true;
+        }
+        else
+        {
+            playerLocomotion.loncat = false;
+        }
+    }
+
+    
 }
