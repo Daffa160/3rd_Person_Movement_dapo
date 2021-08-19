@@ -10,29 +10,42 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Movement Speed")]
 
     //butuh variabel tubuh player
-    //Rigidbody playerRigidbody;
+    Rigidbody playerRigidbody;
     //butuh variabel obyek untuk digerakan
     Transform cameraObyek; // sesuai tampilan kamerea arah graknya
 
     //variabel arah
     Vector3 direction; //butuh variabel arah x, y, z yang akan dituju
 
+    [Header("Movement Speed")]
     public float walkSpeed = 0.03f;
     public float runSpeed = 0.01f;
-    public float sprintSpeed = 10;
+    public float sprintSpeed = 0.015f;
 
     [Header("Kecepatan Rotasi")]
-    public float rotationSpeed = 15;
+    public float rotationSpeed = 8;
+
+    [Header("Grafitasi")]
+    Vector3 grevityVelocity;
+    public Transform GroundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+    public bool diUdara;
+
+    [Header("Jump")]
+    public float gravity = -15;
+    public float jumpHeight = 3;
 
     [Header("Indicator")]
     public bool lari; //untuk pengkondisian true or false nya ada pada inputManager
+    public bool loncat;
 
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         inputManager = GetComponent<InputManager>();
-        //playerRigidbody = GetComponent<Rigidbody>();
+        playerRigidbody = GetComponent<Rigidbody>();
         cameraObyek = Camera.main.transform;
     }
 
@@ -40,6 +53,7 @@ public class PlayerLocomotion : MonoBehaviour
     {
         Movement();
         RotationMovement();
+        JumpMovement();
     }
 
     private void Movement()
@@ -70,7 +84,7 @@ public class PlayerLocomotion : MonoBehaviour
 
         //rumus untuk menggerakn obyek
         Vector3 movement = direction;
-        //playerRigidbody.velocity = movement;
+        playerRigidbody.velocity = movement;
         controller.Move(movement);
     }
 
@@ -98,5 +112,23 @@ public class PlayerLocomotion : MonoBehaviour
         //baru di gerakan dan rotasikan
         transform.rotation = playerRotation;
     }
+
+    private void JumpMovement()
+    {
+        diUdara = Physics.CheckSphere(GroundCheck.position, groundDistance, groundMask);
+        if (diUdara && grevityVelocity.y < 0)
+        {
+            grevityVelocity.y = -2f;
+        }
+
+        if (loncat && diUdara)
+        {
+            grevityVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        }
+
+        grevityVelocity.y += gravity * Time.deltaTime;
+        controller.Move(grevityVelocity * Time.deltaTime);
+    }
+
 
 }
