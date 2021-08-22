@@ -21,6 +21,7 @@ public class PlayerLocomotion : MonoBehaviour
     public float walkSpeed = 0.03f;
     public float runSpeed = 0.01f;
     public float sprintSpeed = 0.015f;
+    public float percepatan;
 
     [Header("Kecepatan Rotasi")]
     public float rotationSpeed = 8;
@@ -67,11 +68,22 @@ public class PlayerLocomotion : MonoBehaviour
         // kecepatan maju obyek
         if (lari)
         {
+            percepatan = percepatan + Time.deltaTime;
+            if(percepatan > 1f)
+            {
+                percepatan = 1f;
+            }
             direction = direction * sprintSpeed;
         }
         else
         {
-            if(inputManager.moveAmount >= 0.5)
+            percepatan = percepatan - Time.deltaTime;
+            if(percepatan < 0)
+            {
+                percepatan = 0f;
+            }
+
+            if (inputManager.moveAmount >= 0.5)
             {
                 direction = direction * runSpeed;
             }
@@ -80,7 +92,7 @@ public class PlayerLocomotion : MonoBehaviour
                 direction = direction * walkSpeed;
             }
         }
-        
+
 
         //rumus untuk menggerakn obyek
         Vector3 movement = direction;
@@ -99,7 +111,7 @@ public class PlayerLocomotion : MonoBehaviour
         targetRotation.y = 0;
 
         //jika arah kamera == 0 akan bergerak maju kedepan
-        if(targetRotation == Vector3.zero)
+        if (targetRotation == Vector3.zero)
         {
             targetRotation = transform.forward;
         }
