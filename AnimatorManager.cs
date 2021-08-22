@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class AnimatorManager : MonoBehaviour
 {
-    Animator animator;
+    public Animator animator;
+    PlayerLocomotion playerLocomotion;
     //parameter id di animator
     int vertical;
     int horizontal;
@@ -12,6 +13,7 @@ public class AnimatorManager : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        playerLocomotion = GetComponent<PlayerLocomotion>();
         vertical = Animator.StringToHash("vertical");
         horizontal = Animator.StringToHash("horizontal");
     }
@@ -68,11 +70,18 @@ public class AnimatorManager : MonoBehaviour
         }
         #endregion
 
+        if (playerLocomotion.percepatan > 0)
+        {
+            snappHorizontal = horizontalMovement;
+            snappVertical = playerLocomotion.percepatan;
+        }
+
         if (lagiLari)
         {
             snappHorizontal = horizontalMovement;
             snappVertical = 2;
         }
+        
 
         animator.SetFloat(horizontal, snappHorizontal, 0.1f, Time.deltaTime);
         animator.SetFloat(vertical, snappVertical, 0.1f, Time.deltaTime);
