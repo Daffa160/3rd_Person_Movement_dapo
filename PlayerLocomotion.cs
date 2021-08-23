@@ -21,7 +21,7 @@ public class PlayerLocomotion : MonoBehaviour
     public float walkSpeed = 0.03f;
     public float runSpeed = 0.01f;
     public float sprintSpeed = 0.015f;
-    public float percepatan;
+    public float percepatanLari;
 
     [Header("Kecepatan Rotasi")]
     public float rotationSpeed = 8;
@@ -31,7 +31,8 @@ public class PlayerLocomotion : MonoBehaviour
     public Transform GroundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    public bool diUdara;
+    public bool diTanah;
+    public float inAirTime;
 
     [Header("Jump")]
     public float gravity = -15;
@@ -68,19 +69,19 @@ public class PlayerLocomotion : MonoBehaviour
         // kecepatan maju obyek
         if (lari)
         {
-            percepatan = percepatan + Time.deltaTime;
-            if(percepatan > 1f)
+            percepatanLari = percepatanLari + Time.deltaTime;
+            if(percepatanLari > 1f)
             {
-                percepatan = 1f;
+                percepatanLari = 1f;
             }
             direction = direction * sprintSpeed;
         }
         else
         {
-            percepatan = percepatan - Time.deltaTime;
-            if(percepatan < 0)
+            percepatanLari = percepatanLari - Time.deltaTime;
+            if(percepatanLari < 0)
             {
-                percepatan = 0f;
+                percepatanLari = 0f;
             }
 
             if (inputManager.moveAmount >= 0.5)
@@ -91,6 +92,7 @@ public class PlayerLocomotion : MonoBehaviour
             {
                 direction = direction * walkSpeed;
             }
+
         }
 
 
@@ -127,13 +129,13 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void JumpMovement()
     {
-        diUdara = Physics.CheckSphere(GroundCheck.position, groundDistance, groundMask);
-        if (diUdara && grevityVelocity.y < 0)
+        diTanah = Physics.CheckSphere(GroundCheck.position, groundDistance, groundMask);
+        if (diTanah && grevityVelocity.y < 0)
         {
             grevityVelocity.y = -2f;
         }
 
-        if (loncat && diUdara)
+        if (loncat && diTanah)
         {
             grevityVelocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
