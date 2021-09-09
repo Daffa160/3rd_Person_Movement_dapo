@@ -6,11 +6,7 @@ public class PlayerLocomotion : MonoBehaviour
 {
     InputManager inputManager;
     CharacterController controller;
-
-    [Header("Movement Speed")]
-
-    //butuh variabel tubuh player
-    Rigidbody playerRigidbody;
+    AnimatorManager animatorManager;
     //butuh variabel obyek untuk digerakan
     Transform cameraObyek; // sesuai tampilan kamerea arah graknya
 
@@ -18,9 +14,9 @@ public class PlayerLocomotion : MonoBehaviour
     Vector3 direction; //butuh variabel arah x, y, z yang akan dituju
 
     [Header("Movement Speed")]
-    public float walkSpeed = 0.03f;
-    public float runSpeed = 0.01f;
-    public float sprintSpeed = 0.015f;
+    public float walkSpeed = 0.01f;
+    public float runSpeed = 0.02f;
+    public float sprintSpeed = 0.03f;
     public float percepatanLari;
 
     [Header("Kecepatan Rotasi")]
@@ -47,12 +43,13 @@ public class PlayerLocomotion : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         inputManager = GetComponent<InputManager>();
-        playerRigidbody = GetComponent<Rigidbody>();
+        animatorManager = GetComponent<AnimatorManager>();
         cameraObyek = Camera.main.transform;
     }
 
     public void HandleAllMovement()
     {
+        //FallingAndLand();
         Movement();
         RotationMovement();
         JumpMovement();
@@ -98,7 +95,6 @@ public class PlayerLocomotion : MonoBehaviour
 
         //rumus untuk menggerakn obyek
         Vector3 movement = direction;
-        playerRigidbody.velocity = movement;
         controller.Move(movement);
     }
 
@@ -142,7 +138,11 @@ public class PlayerLocomotion : MonoBehaviour
 
         grevityVelocity.y += gravity * Time.deltaTime;
         controller.Move(grevityVelocity * Time.deltaTime);
+        //animasi ada di Input Manager
     }
 
-
+    private void FallingAndLand()
+    {
+        
+    }
 }
