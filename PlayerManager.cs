@@ -6,16 +6,20 @@ public class PlayerManager : MonoBehaviour
 {
     InputManager inputManager;
     PlayerLocomotion playerLocomotion;
+    Animator animator;
 
+    public bool IsInteraction;
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        animator = GetComponent<Animator>();
     }
 
     public void Update()
     {
         inputManager.HandleAllInput();
+        
     }
 
     private void FixedUpdate()
@@ -23,4 +27,8 @@ public class PlayerManager : MonoBehaviour
         playerLocomotion.HandleAllMovement();
     }
 
+    private void LateUpdate()
+    {
+        
+    }
 }
